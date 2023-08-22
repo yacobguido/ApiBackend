@@ -1,11 +1,93 @@
-{
-    "Rooms":[
-        {"id":1
-
-        },
-        {"id":2
-            
-        }
-
-    ]
-}
+[
+  {
+    "id": 1,
+    "type": "doble",
+    "pax": 2,
+    "category": "standar",
+    "status": "disp"
+  },
+  {
+    "id": 2,
+    "type": "single",
+    "pax": 2,
+    "category": "premium",
+    "status": "disp"
+  },
+  {
+    "id": 3,
+    "type": "single",
+    "pax": 1,
+    "category": "deluxe",
+    "status": "block"
+  },
+  {
+    "id": 4,
+    "type": "triple",
+    "pax": 3,
+    "category": "premium",
+    "status": "nodisp"
+  },
+  {
+    "id": 5,
+    "type": "triple",
+    "pax": 4,
+    "category": "premium",
+    "status": "block"
+  },
+  {
+    "id": 6,
+    "type": "doble",
+    "pax": 2,
+    "category": "standar",
+    "status": "disp"
+  },
+  {
+    "id": 7,
+    "type": "single",
+    "pax": 1,
+    "category": "deluxe",
+    "status": "nodisp"
+  },
+  {
+    "id": 8,
+    "type": "triple",
+    "pax": 2,
+    "category": "standar",
+    "status": "disp"
+  },
+  {
+    "id": 9,
+    "type": "doble",
+    "pax": 2,
+    "category": "standar",
+    "status": "nodisp"
+  },
+  {
+    "id": 10,
+    "type": "single",
+    "pax": 1,
+    "category": "premium",
+    "status": "block"
+  },
+  {
+    "id": 311,
+    "type": "double",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 313,
+    "type": "triple",
+    "pax": 3,
+    "category": "deluxe",
+    "status": "disp"
+  },
+  {
+    "id": 314,
+    "type": "simple",
+    "pax": 1,
+    "category": "deluxe",
+    "status": "Nodisp"
+  }
+]
