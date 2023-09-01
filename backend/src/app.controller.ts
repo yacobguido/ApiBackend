@@ -1,19 +1,61 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Controller, Get, Res, Post, Delete, Put, Body, Param, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
-
-import { RoomsService } from './rooms/rooms.service';
+import {RoomsService} from './rooms/rooms.service';
 
 @Controller('Rooms')
 export class RoomsController {
+
   constructor(private roomsService: RoomsService){}
+
   @Get()
-  getAll(@Res() res: Response){
-    res.sendFile(this.roomsService.getAll())
+  getAll(@Res() res: Response ){
+ try {
+  const serviceResponse = this.roomsService.getAll();
+  return res.status(HttpStatus.OK).send(serviceResponse)
+ } catch (error) {
+  throw new NotFoundException('Data not found')
+ }
   }
+
+  @Get(':numberRoom')
+  getByNumberRoom(@Param('numberRoom') numberRoom: string, @Res() res: Response ){
+  try {
+    const parsedID = parseInt(numberRoom, 10);
+    const serviceResponse = this.roomsService.getByNumberRoom(parsedID);
+    if(serviceResponse.success){
+      return res.status(HttpStatus.OK).send(serviceResponse)
+    } else {
+      return res.status(HttpStatus.NOT_FOUND).send(serviceResponse)
+    }
+  } catch (error) {
+    throw new BadRequestException(`Cannot get room with number room ${numberRoom}`)
+  }
+  }
+
   @Post()
-  create(@Body() Rooms: any){
-    this.roomsService.create(Rooms)
-    return {Message:'Room saved', Room: Rooms}
+  create(@Body() Room: any, @Res() res: Response){
+    try {
+      this.roomsService.create(Room)
+      return res.status(HttpStatus.CREATED)
+    } catch (error) {
+      throw new BadRequestException('Room creation failed')
+    }
+  }
+  @Delete(':numberRoom')
+  deleteByNumberRoom(@Param('numberRoom') numberRoom: string, @Res() res:Response){
+    try {
+      const serviceResponse = this.roomsService.deleteByNumberRoom(numberRoom);
+      if(serviceResponse.success){
+        return res.status(HttpStatus.OK).send({...serviceResponse})
+      }
+      else {
+        return res.status(HttpStatus.NOT_FOUND).send({...serviceResponse})
+      }
+      
+    } catch (error) {
+      throw new NotFoundException('Delete failed')
+    }
   }
 
 }
+
