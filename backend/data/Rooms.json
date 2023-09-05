@@ -42,18 +42,18 @@
   {
     "id": 6,
     "numberRoom": 101,
-    "type": "doble",
-    "pax": 2,
+    "type": "triple",
+    "pax": 3,
     "category": "standar",
-    "status": "disp"
+    "status": "block"
   },
   {
     "id": 7,
     "numberRoom": 102,
-    "type": "single",
-    "pax": 1,
-    "category": "deluxe",
-    "status": "nodisp"
+    "type": "double",
+    "pax": 2,
+    "category": "premium",
+    "status": "disp"
   },
   {
     "id": 8,
@@ -122,9 +122,9 @@
   {
     "id": 16,
     "numberRoom": 301,
-    "type": "single",
-    "pax": 2,
-    "category": "standar",
+    "type": "triple",
+    "pax": 3,
+    "category": "premium",
     "status": "nodisp"
   },
   {
@@ -153,10 +153,66 @@
   },
   {
     "id": 20,
-    "numberRoom": 1000,
+    "numberRoom": 305,
     "type": "double",
     "pax": 2,
     "category": "premium",
     "status": "disp"
+  },
+  {
+    "id": 21,
+    "numberRoom": 401,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 22,
+    "numberRoom": 402,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 23,
+    "numberRoom": 403,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 24,
+    "numberRoom": 404,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 25,
+    "numberRoom": 405,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 26,
+    "numberRoom": 405,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
+  },
+  {
+    "id": 27,
+    "numberRoom": 501,
+    "type": "triple",
+    "pax": 3,
+    "category": "standar",
+    "status": "block"
   }
 ]
