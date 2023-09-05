@@ -35,16 +35,16 @@ export class RoomsController {
   @Post()
   create(@Body() Room: any, @Res() res: Response){
     try {
-      this.roomsService.create(Room)
-      return res.status(HttpStatus.CREATED)
+      const newRoom =this.roomsService.create(Room)
+      return res.status(HttpStatus.CREATED).send({...newRoom})
     } catch (error) {
       throw new BadRequestException('Room creation failed')
     }
   }
-  @Delete(':numberRoom')
-  deleteByNumberRoom(@Param('numberRoom') numberRoom: string, @Res() res:Response){
+  @Delete(':id')
+  deleteByID(@Param('id') id: string, @Res() res:Response){
     try {
-      const serviceResponse = this.roomsService.deleteByNumberRoom(numberRoom);
+      const serviceResponse = this.roomsService.deleteByID(id);
       if(serviceResponse.success){
         return res.status(HttpStatus.OK).send({...serviceResponse})
       }
@@ -56,6 +56,20 @@ export class RoomsController {
       throw new NotFoundException('Delete failed')
     }
   }
-
+  @Put(':numberRoom')
+  updateByNumberRoom(@Param('numberRoom') numberRoom: string, @Body() body: any, @Res() res: Response){
+    try {
+      const parsedNumberRoom = parseInt(numberRoom, 10);
+      const serviceResponse = this.roomsService.updateByNumberRoom(parsedNumberRoom, body);
+      if(serviceResponse.success){
+        return res.status(HttpStatus.OK).send({...serviceResponse, code: HttpStatus.OK})
+      } else {
+        return res.status(HttpStatus.NOT_FOUND).send({...serviceResponse, code: HttpStatus.NOT_FOUND})
+      }
+    } catch (error) {
+      throw new BadRequestException(`Update failed`)
+    }
+  }
 }
+
 
