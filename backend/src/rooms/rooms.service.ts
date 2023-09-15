@@ -1,70 +1,84 @@
 import { Injectable } from '@nestjs/common';
-import { join} from 'path';
-import * as fs from 'fs';
-import { createID, readParse} from '../utils/utils';
+import { Room } from './rooms.interface';
+import { roomDto} from './room.dto';
+const BASE_URL = 'http://localhost:3030/Rooms/';
 @Injectable()
 export class RoomsService {
-    private Rooms= join(__dirname, '../../data/Rooms.json')
-    getAll(){
-      try {
-        return readParse();
-    } catch (error) {
-        throw new Error('Cannot get data')
+    async getAll(): Promise<Room[]> {
+        const res = await fetch(BASE_URL);
+        const parsed = await res.json();
+        return parsed;
     }
+    async getByID(id: number) : Promise <Room> {
+        const res = await fetch(BASE_URL + id);
+        const parsed = await res.json();
+        return parsed;
     }
-   create(Room: any): {success: boolean, message: string} {
+   async create(Room: roomDto): Promise <any> {
     try {
-        const newRoom = {id: createID(), ...Room};
-        console.log(newRoom);
-        const data = readParse();
-        data.push(newRoom);
-        fs.writeFileSync(this.Rooms, JSON.stringify(data, null, 2))
-        return {message: `Room created id:${newRoom.id}`, success: true}
-    } catch (error) {
-        throw new Error("Created failed");
-    }
+        const id = await this.setRoom();
+        const { numberRoom, type, pax, category, status } = Room;
+        const newRoom = { id, numberRoom, type, pax, category, status };
+        const res = await fetch(BASE_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newRoom),
+        });
+        const parsed = await res.json();
+        return parsed;
+      } catch (error) {
+        throw new Error('Room creation failed');
+      }
   }
-  deleteByID(id: string): {success: boolean, message: string}{
-    try {
-        const data = readParse();
-        const roomFound = data.findIndex((Room: { id: number; }) => Room.id === Number(id))
-        if(roomFound >= 0){
-            data.splice(roomFound, 1)
-            fs.writeFileSync(this.Rooms, JSON.stringify(data, null, 2))
-            return {success: true, message: `Room with id: ${id}, was deleted`}
-        } else {
-            return {success: false, message: `Room with id: ${id}, was not found`}
-        }
-    } catch (error) {
-        throw new Error(`Delete Failed`)
-    }
+  async deleteByID(id: number): Promise<any>{
+    const res = await fetch(BASE_URL + id, {
+        method: 'DELETE',
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to delete Room');
+      }
+  
+      const parsed = await res.json();
+      return parsed;
     }
     
-    updateByNumberRoom(numberRoom: number, body: any): {success: boolean, message: string, data?: any}{
-        try {
-            const data = readParse();
-            const index = data.findIndex((room : {numberRoom : number}) => room.numberRoom === numberRoom)
-            if(index >= 0){
-                const editedRoom = {...data[index], ...body, numberRoom}
-                data[index] = editedRoom
-                fs.writeFileSync(this.Rooms, JSON.stringify(data, null, 2))
-                return {success: true, message: `Room with number Room: ${numberRoom}, was edited`, data: editedRoom}
-            } return {success: false, message: `Room with number Room: ${numberRoom}, was not found`};
-        } catch (error) {
-                throw new Error(`Update Failed`)
+    async updateByID(id: number, body: roomDto): Promise<any>{
+        const isRoom = await this.getByID(id);
+
+        if (!Object.keys(isRoom).length) {
+          return false;
         }
+    
+        const updatedRoom = {
+          numberRoom: body.numberRoom,
+          type: body.type,
+          pax: body.pax,
+          category: body.category,
+          status: body.status
+        };
+    
+        const res = await fetch(BASE_URL + id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedRoom),
+        });
+    
+        if (!res.ok) {
+          throw new Error('Failed to update Room');
+        }
+    
+        return updatedRoom;
     }
             
-    getByNumberRoom(numberRoom: number) : {data?: any, success: boolean, message: string}{
-        try {
-            const data = readParse();
-            const index = data.findIndex((room: { numberRoom: number; }) => room.numberRoom === numberRoom);
-            if(index >= 0){
-            return {success: true, message: 'Room found', data: data[index]}
-            } else return {success: false, message: 'Room not found'}
-        } catch (error) {
-            throw new Error("Error getting Room");
-        }
-    }
+    private async setRoom(): Promise<number> {
+        const rooms = await this.getAll();
+        const id = rooms.pop().id + 1;
+        return id;
+      }
 
 }
